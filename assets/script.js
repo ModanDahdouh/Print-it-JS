@@ -26,19 +26,17 @@ const dots = document.querySelectorAll(".dot");
 let currentSlide = 0;
 
 function showSlide(index) {
-    // Assurez-vous que l'index de la diapositive est valide
     if (index < 0) {
         currentSlide = slides.length - 1;
     } else if (index >= slides.length) {
         currentSlide = 0;
     }
-    // Masquez toutes les diapositives
+
     const allSlides = document.querySelectorAll(".slide");
     allSlides.forEach((slide) => {
         slide.style.display = "none";
     });
 
-    // Affichez la diapositive actuelle
     const currentSlideElement =
         document.querySelectorAll(".slide")[currentSlide];
     currentSlideElement.style.display = "flex";
@@ -53,22 +51,18 @@ function showSlide(index) {
     });
 }
 
-// Affichez la première diapositive lors du chargement initial
 showSlide(currentSlide);
 
-// Gestionnaire de clic pour la flèche gauche
 arrow_left.addEventListener("click", () => {
     currentSlide--;
     showSlide(currentSlide);
 });
 
-// Gestionnaire de clic pour la flèche droite
 arrow_right.addEventListener("click", () => {
     currentSlide++;
     showSlide(currentSlide);
 });
 
-// Gestionnaire de clic pour les points
 dots.forEach((dot, index) => {
     dot.addEventListener("click", () => {
         currentSlide = index;
