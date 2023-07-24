@@ -1,71 +1,89 @@
-const slides = [
-    {
-        image: "slide1.jpg",
-        tagLine:
-            "Impressions tous formats <span>en boutique et en ligne</span>",
-    },
-    {
-        image: "slide2.jpg",
-        tagLine:
-            "Tirages haute définition grand format <span>pour vos bureaux et events</span>",
-    },
-    {
-        image: "slide3.jpg",
-        tagLine: "Grand choix de couleurs <span>de CMJN aux pantones</span>",
-    },
-    {
-        image: "slide4.png",
-        tagLine: "Autocollants <span>avec découpe laser sur mesure</span>",
-    },
-];
+// fetch("slides.json")
+//     .then((response) => response.json())
+//     .then((slidesData) => {
+document.addEventListener("DOMContentLoaded", async function () {
+    const response = await fetch("slides.json");
+    const slidesData = await response.json();
 
-const arrow_left = document.querySelector(".arrow_left");
-const arrow_right = document.querySelector(".arrow_right");
-const dots = document.querySelectorAll(".dot");
+    const banner = document.getElementById("banner");
 
-let currentSlide = 0;
+    const slideshow = document.createElement("div");
+    slideshow.id = "banner";
+    slideshow.classList.add("arrow");
 
-function showSlide(index) {
-    if (index < 0) {
-        currentSlide = slides.length - 1;
-    } else if (index >= slides.length) {
-        currentSlide = 0;
+    slidesData.forEach((slideData, index) => {
+        const slide = document.createElement("div");
+        slide.classList.add("slide");
+        slide.id = "banner";
+
+        const img = document.createElement("img");
+        img.classList.add("banner-img");
+        img.src = `./assets/images/slideshow/${slideData.image}`;
+        img.alt = "Banner Print-it";
+        slide.appendChild(img);
+
+        const p = document.createElement("p");
+        p.innerHTML = slideData.tagLine;
+        slide.appendChild(p);
+
+        slideshow.appendChild(slide);
+    });
+
+    banner.appendChild(slideshow);
+
+    const leftArrow = document.createElement("img");
+    leftArrow.classList.add("arrow", "arrow_left");
+    leftArrow.src = "./assets/images/arrow_left.png";
+    leftArrow.alt = "arrow left";
+    banner.appendChild(leftArrow);
+
+    const rightArrow = document.createElement("img");
+    rightArrow.classList.add("arrow", "arrow_right");
+    rightArrow.src = "./assets/images/arrow_right.png";
+    rightArrow.alt = "arrow right";
+    banner.appendChild(rightArrow);
+
+    const dotsContainer = document.createElement("div");
+    dotsContainer.classList.add("dots");
+
+    for (let i = 0; i < slidesData.length; i++) {
+        const dot = document.createElement("div");
+        dot.classList.add("dot", i === 0 ? "dot_selected" : "dot");
+        dotsContainer.appendChild(dot);
+
+        dot.addEventListener("click", () => {
+            currentSlideIndex = i;
+            showSlide(currentSlideIndex);
+        });
+    }
+    banner.appendChild(dotsContainer);
+
+    let currentSlideIndex = 0;
+
+    function showSlide(index) {
+        const slides = slideshow.querySelectorAll(".slide");
+        slides.forEach((slide, i) => {
+            slide.style.display = i === index ? "flex" : "none";
+        });
+
+        const dots = dotsContainer.querySelectorAll(".dot");
+        dots.forEach((dot, i) => {
+            dot.classList.toggle("dot_selected", i === index);
+        });
+
+        currentSlideIndex = index;
     }
 
-    const allSlides = document.querySelectorAll(".slide");
-    allSlides.forEach((slide) => {
-        slide.style.display = "none";
+    showSlide(currentSlideIndex);
+
+    leftArrow.addEventListener("click", () => {
+        currentSlideIndex =
+            (currentSlideIndex - 1 + slidesData.length) % slidesData.length;
+        showSlide(currentSlideIndex);
     });
 
-    const currentSlideElement =
-        document.querySelectorAll(".slide")[currentSlide];
-    currentSlideElement.style.display = "flex";
-
-    // Mettez à jour la sélection des points
-    dots.forEach((dot, index) => {
-        if (index === currentSlide) {
-            dot.classList.add("dot_selected");
-        } else {
-            dot.classList.remove("dot_selected");
-        }
-    });
-}
-
-showSlide(currentSlide);
-
-arrow_left.addEventListener("click", () => {
-    currentSlide--;
-    showSlide(currentSlide);
-});
-
-arrow_right.addEventListener("click", () => {
-    currentSlide++;
-    showSlide(currentSlide);
-});
-
-dots.forEach((dot, index) => {
-    dot.addEventListener("click", () => {
-        currentSlide = index;
-        showSlide(currentSlide);
+    rightArrow.addEventListener("click", () => {
+        currentSlideIndex = (currentSlideIndex + 1) % slidesData.length;
+        showSlide(currentSlideIndex);
     });
 });
