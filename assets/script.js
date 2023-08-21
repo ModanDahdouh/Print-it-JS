@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     let currentSlideIndex = 0; // pour lordre de mes image a afiche 0 = la premier image
 
     // function showlide on modifie le style si i === index ? "flex" : "none" on ajoute "flex" sinon si false on mes "none"
-    //ou on ajoute ou suprime "dot_selected" si i === index
+    //ou on ajoute ou enleve "dot_selected" si i === index
     function showSlide(index) {
         const slides = slideshow.querySelectorAll(".slide");
         slides.forEach((slide, i) => {
