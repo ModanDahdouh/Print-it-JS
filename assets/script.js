@@ -1,5 +1,5 @@
 // "DOMContentLoaded"  c'est l'événement qui se déclenche lorsque le document HTML a été complètement chargé et prêt à être manipulé
-// on ajoute la fonction asyncrone = chaque élement marche individuelement.
+
 document.addEventListener("DOMContentLoaded", async function () {
     const response = await fetch("slides.json");
     const slidesData = await response.json();
